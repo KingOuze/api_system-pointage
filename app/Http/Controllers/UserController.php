@@ -47,7 +47,7 @@ class UserController extends Controller
                     'password' => 'required|string|min:8',
                 ]);
                 $userData['cardId'] = $request->cardId;
-                $userData['password'] = Hash::make($request->password);
+                $userData['password'] = bcrypt($request->password);
                 // Autogénérer un matricule
                 $matricule = 'MAT_ADM-' . strtoupper(uniqid());
                 $userData['matricule'] = $matricule;
@@ -57,7 +57,7 @@ class UserController extends Controller
                 $request->validate([
                     'password' => 'required|string|min:8',
                 ]);
-                $userData['password'] = Hash::make($request->password);
+                $userData['password'] = bcrypt($request->password)::make($request->password);
                 // Autogénérer un matricule
                 $matricule = 'MAT_VIG-' . strtoupper(uniqid());
                 $userData['matricule'] = $matricule;
