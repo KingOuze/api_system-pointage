@@ -4,8 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\departementController;
-use App\Http\Controllers\CohorteController; 
-
+use App\Http\Controllers\CohorteController;
+use App\Http\Controllers\PointageController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -99,3 +99,6 @@ Route::delete('/cohortes/delete/{id}', [CohorteController::class, 'delete']);
 
 //route pour importer un fichier csv des Cohorte
 Route::post('/cohortes/import', [CohorteController::class, 'importCohortesFromCSV']);
+
+//Recuperer toutes les pointages
+Route::get('/pointages', [PointageController::class, 'index']);

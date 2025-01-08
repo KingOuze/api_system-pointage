@@ -27,4 +27,10 @@ class User extends Eloquent
     ];
 
     protected $hidden = ['password'];
+
+    // Relation avec les pointages
+    public function pointages()
+    {
+        return $this->hasMany(Pointage::class, 'user_id', '_id');
+    }
 }
