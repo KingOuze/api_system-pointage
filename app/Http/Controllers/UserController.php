@@ -42,6 +42,7 @@ class UserController extends Controller
             'email' => $request->email,
             'addresse' => $request->addresse,
             'role' => $request->role,
+            'status' => "actif",
         ];
 
         // Ajouter les champs spécifiques en fonction du rôle
