@@ -41,6 +41,9 @@ Route::delete('/users/{id}', [UserController::class, 'deleteUser']);
 // Route pour supprimer plusieurs utilisateurs
 Route::delete('/users', [UserController::class, 'deleteMultipleUsers']);
 
+//Route pour switcher le status
+Route::put('/users/switch-status/{id}', [UserController::class,'switchStatus']);
+
 //Route pour importer le fichier CSV pour l'enregistre
 Route::post('/users/import', [UserController::class, 'importUsersFromCSV']);
 

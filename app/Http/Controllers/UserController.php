@@ -24,6 +24,11 @@ class UserController extends Controller
         ]);
 
         
+        $userExist = User::where('email', $request->email)->get();
+
+        if ($userExist->count() > 0) {
+            return response()->json(['error' => 'Email déjà utilisée', 'user' => $request], 400);
+        }
 
         // Gérer l'upload de la photo
         //$photoPath = $request->hasFile('photo') ? $request->file('photo')->store('photos', 'public') : null;
@@ -57,7 +62,7 @@ class UserController extends Controller
                 $request->validate([
                     'password' => 'required|string|min:8',
                 ]);
-                $userData['password'] = bcrypt($request->password)::make($request->password);
+                $userData['password'] = bcrypt($request->password);
                 // Autogénérer un matricule
                 $matricule = 'MAT_VIG-' . strtoupper(uniqid());
                 $userData['matricule'] = $matricule;
@@ -232,7 +237,7 @@ class UserController extends Controller
     protected function validateAdmin(Request $request, User $user)
     {
         $request->validate([
-            'cardId' => 'nullable|string|max:255|unique:users,cardId,' . $user->id,
+            'cardId' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:8',
         ]);
         $user->cardId = $request->cardId ?? $user->cardId;
@@ -254,7 +259,7 @@ class UserController extends Controller
         $request->validate([
             'departement' => 'nullable|string|max:255',
             'fonction' => 'nullable|string|max:255',
-            'cardId' => 'nullable|string|max:255|unique:users,cardId,' . $user->id,
+            'cardId' => 'nullable|string|max:255',
         ]);
         $user->departement = $request->departement ?? $user->departement;
         $user->fonction = $request->fonction ?? $user->fonction;
@@ -265,7 +270,7 @@ class UserController extends Controller
     {
         $request->validate([
             'cohorte' => 'nullable|string|max:255',
-            'cardId' => 'nullable|string|max:255|unique:users,cardId,' . $user->id,
+            'cardId' => 'nullable|string|max:255',
         ]);
         $user->cohorte = $request->cohorte ?? $user->cohorte;
         $user->cardId = $request->cardId ?? $user->cardId;
@@ -455,5 +460,20 @@ class UserController extends Controller
         return response()->json($users, 200);
     }
 
-   
+    //Fonction pour switcher les status
+    public function switchStatus($id, Request $request)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        if ($user->status == 'actif') {
+            $user->status = 'bloque';
+        } else {   
+            $user->status = 'actif';
+        } 
+
+        $user->save();
+        return response()->json(['message' => 'User status updated successfully'], 200);
+    }
 }
